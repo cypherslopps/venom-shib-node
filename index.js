@@ -5,6 +5,10 @@ require("dotenv").config();
 const app = express();
 const PORT = process.env.PORT || 5001;
 
+app.use((req, res) => {
+    res.send("Hello world");
+})
+
 app.post("/burn-list", (req, res) => {
     console.log(req.body);
 });
