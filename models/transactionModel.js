@@ -12,8 +12,8 @@ const transactionSchema = mongoose.Schema(
                 required: [true, "Please add token name"] 
             },
             image: {
-                data: Buffer,
-                contentType: String
+                type: String,
+                required: [true, "Please add token image"]
             },
             symbol: {
                 type: String,

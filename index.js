@@ -1,9 +1,7 @@
 const express = require("express");
 const cors = require("cors");
-const fs = require("fs");
-const path = require("path");
 const asyncHandler = require("express-async-handler");
-const multer = require("multer");
+// const multer = require("multer");
 const bodyParser = require("body-parser");
 const connectDb = require("./config/dbConnection");
 const Transaction = require("./models/transactionModel");
@@ -16,36 +14,32 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json());
 app.use(cors());
 
-var storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, 'uploads')
-    },
-    filename: (req, file, cb) => {
-        cb(null, file.fieldname + '-' + Date.now())
-    }
-});
+// var storage = multer.diskStorage({
+//     destination: (req, file, cb) => {
+//         cb(null, 'uploads')
+//     },
+//     filename: (req, file, cb) => {
+//         cb(null, file.fieldname + '-' + Date.now())
+//     }
+// });
  
-var upload = multer({ storage: storage });
+// var upload = multer({ storage: storage });
 
 connectDb();
 
 // Mongo password: r5ckVgHJKxscAwrq
 
-app.post("/burn", upload.single('image'), asyncHandler(async (req, res) => {
-    const { userId, name, symbol, transaction } = req.body;
-    const { filename } = req.file;
+app.post("/burn", asyncHandler(async (req, res) => {
+    const { userId, name, image, symbol, transaction } = req.body;
     
-    if(userId || name || symbol || transaction || filename) {
+    if(userId || name || symbol || transaction || image) {
         try {
             const data = {
                 userId,
                 token: {
                     name,
                     symbol,
-                    image: {
-                        data: fs.readFileSync(path.join(__dirname + '/uploads/' + filename)),
-                        contentType: 'image/png'
-                    },
+                    image: image
                 },
                 transactionId: transaction,
                 date: new Date()
