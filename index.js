@@ -31,35 +31,29 @@ connectDb();
 
 // Mongo password: r5ckVgHJKxscAwrq
 
-app.post("/burn-list", upload.single('image'), asyncHandler(async (req, res) => {
-    const { userId, name, transactionId } = req.body;
+app.post("/burn", upload.single('image'), asyncHandler(async (req, res) => {
+    const { userId, name, symbol, transaction } = req.body;
     const { filename } = req.file;
     
-    if(userId || name || transactionId || file) {
+    if(userId || name || symbol || transaction || filename) {
         try {
             const data = {
                 userId,
                 token: {
-                    name: req.body.name,
+                    name,
+                    symbol,
                     image: {
-                        data: fs.readFileSync(path.join(__dirname + '/uploads/' + req.file.filename)),
+                        data: fs.readFileSync(path.join(__dirname + '/uploads/' + filename)),
                         contentType: 'image/png'
-                    }
+                    },
                 },
-                transactionId: req.body.transaction,
+                transactionId: transaction,
                 date: new Date()
             };
             
             const transactionResponse = await Transaction.create(data);
-            console.log(transactionResponse)
-            
-                    // console.log(item)
-                    // // item.save();
-                    // res.redirect('/');
-            console.log(transactionResponse)
             res.json({ message: "Success" })
         } catch(err) {
-            console.log(err);
             res.status(400).json({
                 title: "Error",
                 message: "Error uploading data"
@@ -73,10 +67,8 @@ app.post("/burn-list", upload.single('image'), asyncHandler(async (req, res) => 
 app.get("/burn-list", asyncHandler(async (req, res) => {
     try {
         const transactions = await Transaction.find();
-        console.log(transactions)
         res.json(transactions);
     } catch(err) {
-        console.log(err)
         res.status(400).json({ title: "Fetch Failed",  message: "Failed to fetch transactions" })
     }
 }));
@@ -86,10 +78,8 @@ app.get("/burn-list/:userId", asyncHandler(async (req, res) => {
 
     try {
         const transactions = await Transaction.find({ userId });
-        console.log(transactions)
         res.json(transactions);
     } catch(err) {
-        console.log(err)
         res.status(400).json({ title: "Fetch Failed",  message: "Failed to fetch transactions" })
     }
 }));

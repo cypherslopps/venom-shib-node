@@ -4,7 +4,7 @@ const transactionSchema = mongoose.Schema(
     {
         userId: {
             type: String,
-            required: [true, "User id is required"]
+            required: [true, "User id is required"],
         },
         token: {
             name: { 
@@ -15,10 +15,15 @@ const transactionSchema = mongoose.Schema(
                 data: Buffer,
                 contentType: String
             },
+            symbol: {
+                type: String,
+                required: [true, "Please add token symbol"]
+            }
         },
         transactionId: {
             type: String,
-            required: [true, "Please add a transaction id"]
+            required: [true, "Please add a transaction id"],
+            unique: true,
         }
     },
     {
