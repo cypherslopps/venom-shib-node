@@ -9,19 +9,20 @@ const collectionName = "burn-transactions";
 
 // @notice: Add new burnt transaction
 const createBurntToken = asyncHandler(async (req, res) => {
-    const { userId, name, image, symbol, transaction } = req.body;
+    const { userId, name, amount, image, symbol, transaction } = req.body;
 
-    if(userId || name || symbol || transaction || image) {
+    if(userId || name || symbol || amount || transaction || image) {
         try {
             const data = {
                 userId,
                 token: {
                     name,
                     symbol,
+                    amount,
                     image: image
                 },
                 transactionId: transaction,
-                createdAt: new Date()
+                createdAt: Date.now()
             };
 
             // Upload burnt token data
@@ -29,7 +30,6 @@ const createBurntToken = asyncHandler(async (req, res) => {
 
             res.json({ title: "Success", message: "Burnt token successfully uploaded"});
         } catch(err) {
-            console.log(err.message, err);
             res.status(400).json({
                 title: "Error",
                 message: "Error uploading data"

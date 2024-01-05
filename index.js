@@ -5,7 +5,7 @@ const { initializeFirebaseApp } = require("./lib/firebase");
 
 // Routes
 const burnRoute = require("./routes/Burn.route");
-// const swapRoute = require("./routes/Swap.route");
+const dexRoute = require("./routes/Dex.route");
 
 require("dotenv").config();
 
@@ -20,7 +20,7 @@ app.use(cors());
 initializeFirebaseApp();
 
 app.use("/api/burn", burnRoute);
-// app.use("/api/swap", swapRoute);
+app.use("/api/dex", dexRoute);
 
 app.listen(PORT, () => {
     console.log(`Server started at ${PORT}`);
